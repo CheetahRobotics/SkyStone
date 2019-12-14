@@ -13,7 +13,7 @@ public class State1 extends StateBase {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive ;
     private DcMotor rightDrive ;
-    private DcMotor arm;
+    //private DcMotor arm;
 
 
     static final double INCREMENT   = 0.01;
@@ -21,15 +21,19 @@ public class State1 extends StateBase {
     static final double MAX_POS     =  1.0;
     static final double MIN_POS     =  0.0;
     Servo servo;
+    Servo servo_2;
     double  position = (MAX_POS - MIN_POS) / 2;
+
+
 
 
     public State1(StateMachine stateMachine) {
         super(stateMachine);
         leftDrive  = hardwareMap.get(DcMotor.class, "motor_1");
         rightDrive = hardwareMap.get(DcMotor.class, "motor_2");
-        arm = hardwareMap.get(DcMotor.class,"motor_3");
-        servo = hardwareMap.get(Servo.class, "servo");
+        //arm = hardwareMap.get(DcMotor.class,"motor_3");
+        servo = hardwareMap.get(Servo.class, "right_servo");
+        servo_2 = hardwareMap.get(Servo.class, "left_servo");
 
     }
 
@@ -49,27 +53,28 @@ public class State1 extends StateBase {
 
         double leftPower;
         double rightPower;
-        double liftpower;
-        double droppower;
+//        double liftpower;
+//        double droppower;
 
         double drive = -gamepad.right_stick_x;
         double turn  = gamepad.left_stick_y;
-        float lift = -gamepad.right_trigger;
-        float drop = gamepad.left_trigger;
-
+//        float lift = -gamepad.right_trigger;
+//        float drop = gamepad.left_trigger;
+//
         this.servo.setPosition(position);
-      
+        addTelemetry( "Servo Positon","%s", this.servo.getPosition());
 
-        leftPower   = Range.clip(drive + turn, -0.5, 0.5) ;
-        rightPower   = Range.clip(drive - turn, -0.5, 0.5) ;
-        liftpower = Range.clip(lift,-1,1.0);
-        droppower = Range.clip(drop,-1,1);
+
+        leftPower   = Range.clip(drive + turn, -1.0, 1.0) ;
+        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+//        liftpower = Range.clip(lift,-1,1.0);
+//        droppower = Range.clip(drop,-1,1);
 
         leftDrive.setPower(leftPower);
 
         rightDrive.setPower(rightPower);
-        arm.setPower(liftpower);
-        arm.setPower(droppower);
+//        arm.setPower(liftpower);
+//        arm.setPower(droppower);
 
         // this is called after all events
         addTelemetry("LeftStick", "X: %f, Y: %f",
@@ -78,14 +83,14 @@ public class State1 extends StateBase {
                 gamepad.left_trigger, gamepad.right_trigger);
         addTelemetry("Power", " left power: %f, right power: %f ",
                 leftPower, rightPower);
-        addTelemetry("Servo Position", "%5.2f", position);
+       // addTelemetry("Servo Position", "%5.2f", position);
     }
     public void leftBumperChanged(boolean left_bumper) {
         if (left_bumper == true){
             position= position+.25;
         }
         addTelemetry("Left Bumper", "%s", Boolean.toString(left_bumper));
-
+        addTelemetry( "Positon","%s",position);
     }
     public void rightBumperChanged(boolean right_bumper) {
         if (right_bumper == true){
@@ -94,7 +99,7 @@ public class State1 extends StateBase {
         }
 
         addTelemetry("Right Bumper", "%s", Boolean.toString(right_bumper));
-
+        addTelemetry( "Positon","%s",position);
     }
 }
 

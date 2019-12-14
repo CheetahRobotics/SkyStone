@@ -15,9 +15,13 @@ public class OpMode extends OpModeBase {
     @Override
     public void initStateMachine(StateMachine stateMachine) {
         // If you want to use this code with a new robot,
+        // Encoder counts for REV HD HEX Motor is 2240 per revolution
+        // The wheel Circumfrence for each wheel is as follows
+        //REV 60mm Traction wheel: 10.99cm, Tetrix Max All Terrain Tire: 15.70796cm
+        // Tetrix Max 4" Wheel: 12.56cm
         // just update the RobotCallibration numbers on the next line:
         stateMachine.setRobotCalibration(new RobotCalibration(
-                15.70796,
+                12.56,
                 1307,
                 1960));
 
