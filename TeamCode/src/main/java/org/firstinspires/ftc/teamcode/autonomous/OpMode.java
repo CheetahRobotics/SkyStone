@@ -18,11 +18,11 @@ public class OpMode extends OpModeBase {
         // Encoder counts for REV HD HEX Motor is 2240 per revolution
         // The wheel Circumfrence for each wheel is as follows
         //REV 60mm Traction wheel: 10.99cm, Tetrix Max All Terrain Tire: 15.70796cm
-        // Tetrix Max 4" Wheel: 12.56cm
+        // Tetrix Max 4" Wheel: 12.56cm, Mecanum HD Wheel: 31.9024
         // just update the RobotCallibration numbers on the next line:
         stateMachine.setRobotCalibration(new RobotCalibration(
-                12.56,
-                1307,
+                31.9024,
+                287,
                 1960));
 
         stateMachine.updateState(State1.class);    // Start at state number 1.

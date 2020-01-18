@@ -19,7 +19,7 @@ public class OpMode extends OpModeBase {
         // just update the RobotCallibration numbers on the next line:
         stateMachine.setRobotCalibration(new RobotCalibration(
                 12.56,
-                1307,
+                289,
                 2614));
         stateMachine.updateState(Drive1Rotations.class);
     }

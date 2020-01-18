@@ -13,6 +13,8 @@ public class State1 extends StateBase {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive ;
     private DcMotor rightDrive ;
+    private DcMotor leftD ;
+    private DcMotor rightD ;
     //private DcMotor arm;
 
 
@@ -22,7 +24,8 @@ public class State1 extends StateBase {
     static final double MIN_POS     =  0.0;
     Servo servo;
     Servo servo_2;
-    double  position = (MAX_POS - MIN_POS) / 2;
+    double  position_1 = (MAX_POS - MIN_POS) / 2;
+    double  position_2 = (MAX_POS - MIN_POS) / 2;
 
 
 
@@ -31,6 +34,8 @@ public class State1 extends StateBase {
         super(stateMachine);
         leftDrive  = hardwareMap.get(DcMotor.class, "motor_1");
         rightDrive = hardwareMap.get(DcMotor.class, "motor_2");
+        leftD= hardwareMap.get(DcMotor.class, "motor_3");
+        rightD= hardwareMap.get(DcMotor.class, "motor_4");
         //arm = hardwareMap.get(DcMotor.class,"motor_3");
         servo = hardwareMap.get(Servo.class, "right_servo");
         servo_2 = hardwareMap.get(Servo.class, "left_servo");
@@ -60,9 +65,11 @@ public class State1 extends StateBase {
         double turn  = gamepad.left_stick_y;
 //        float lift = -gamepad.right_trigger;
 //        float drop = gamepad.left_trigger;
-//
-        this.servo.setPosition(position);
+
+        this.servo.setPosition(position_1);
         addTelemetry( "Servo Positon","%s", this.servo.getPosition());
+        this.servo_2.setPosition(position_2);
+        addTelemetry( "Servo Positon","%s", this.servo_2.getPosition());
 
 
         leftPower   = Range.clip(drive + turn, -1.0, 1.0) ;
@@ -71,8 +78,11 @@ public class State1 extends StateBase {
 //        droppower = Range.clip(drop,-1,1);
 
         leftDrive.setPower(leftPower);
+        leftD.setPower(rightPower);
 
         rightDrive.setPower(rightPower);
+        rightD.setPower(leftPower);
+
 //        arm.setPower(liftpower);
 //        arm.setPower(droppower);
 
@@ -87,19 +97,21 @@ public class State1 extends StateBase {
     }
     public void leftBumperChanged(boolean left_bumper) {
         if (left_bumper == true){
-            position= position+.25;
+            position_1= position_1+.25;
+            position_2= position_2-.25;
         }
         addTelemetry("Left Bumper", "%s", Boolean.toString(left_bumper));
-        addTelemetry( "Positon","%s",position);
+        addTelemetry( "Positon","%s",position_1);
+        addTelemetry( "Positon","%s",position_2);
     }
     public void rightBumperChanged(boolean right_bumper) {
         if (right_bumper == true){
-            position= position-.25;
-
+            position_1= position_1-.25;
+            position_2= position_2+.25;
         }
-
         addTelemetry("Right Bumper", "%s", Boolean.toString(right_bumper));
-        addTelemetry( "Positon","%s",position);
+        addTelemetry( "Positon","%s",position_1);
+        addTelemetry( "Positon","%s",position_2);
     }
 }
 
