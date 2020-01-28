@@ -21,7 +21,7 @@ public class DropOff5 extends StateBase {
     @Override
     public void postEventsCallback() {
         sleep(2000);
-        this.stateMachine.updateState(State6.class);
+        this.stateMachine.updateState(State3.class);
     }
 
     @Override
