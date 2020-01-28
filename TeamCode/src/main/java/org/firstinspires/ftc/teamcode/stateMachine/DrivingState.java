@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.stateMachine;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.stateMachine.StateBase;
 import org.firstinspires.ftc.teamcode.stateMachine.StateMachine;
@@ -8,6 +9,8 @@ import org.firstinspires.ftc.teamcode.stateMachine.StateMachine;
 public abstract class DrivingState extends StateBase {
     protected final DcMotor leftDrive;
     protected final DcMotor rightDrive;
+    protected final DcMotor leftDr;
+    protected final DcMotor rightDr;
     private final double timeToDriveInSeconds;
     private final double amountToDriveInInches;
     protected final Class<? extends StateBase> nextState;
@@ -27,6 +30,8 @@ public abstract class DrivingState extends StateBase {
         }
         leftDrive = hardwareMap.get(DcMotor.class, "motor_2");
         rightDrive = hardwareMap.get(DcMotor.class, "motor_1");
+        leftDr = hardwareMap.get(DcMotor.class, "motor_3");
+        rightDr = hardwareMap.get(DcMotor.class, "motor_4");
         this.nextState = nextState;
         this.leftPower = leftPower;
         this.rightPower = rightPower;
@@ -48,6 +53,12 @@ public abstract class DrivingState extends StateBase {
             rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            leftDr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightDr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftDr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightDr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftDr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
@@ -61,12 +72,16 @@ public abstract class DrivingState extends StateBase {
 
     @Override
     public void postEventsCallback() {
-        addTelemetry("Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
-        addTelemetry("Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
+        addTelemetry("BK Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
+        addTelemetry("BK Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
+        addTelemetry("FRT Left Motor Pos: ", "%d", leftDr.getCurrentPosition());
+        addTelemetry("FRT Right Motor Pos: ", "%d", rightDr.getCurrentPosition());
         if (usingEncoders &&
                 Math.abs(leftDrive.getCurrentPosition()) > stateMachine.getRobotCalibration().getCounts(amountToDriveInInches)) {
-            addTelemetry("Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
-            addTelemetry("Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
+            addTelemetry("BK Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
+            addTelemetry("BK Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
+            addTelemetry("FRT Left Motor Pos: ", "%d", leftDr.getCurrentPosition());
+            addTelemetry("FRT Right Motor Pos: ", "%d", rightDr.getCurrentPosition());
             stopMotors();
             sleep(1000);
             stateMachine.updateState(this.nextState);
@@ -75,6 +90,10 @@ public abstract class DrivingState extends StateBase {
             leftDrive.setPower(leftPower);
             rightDrive.setDirection(DcMotor.Direction.FORWARD);
             rightDrive.setPower(rightPower);
+            leftDr.setDirection(DcMotor.Direction.REVERSE);
+            leftDr.setPower(rightPower);
+            rightDr.setDirection(DcMotor.Direction.REVERSE);
+            rightDr.setPower(leftPower);
         }
     }
 
@@ -83,5 +102,9 @@ public abstract class DrivingState extends StateBase {
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setPower(0.0);
         rightDrive.setPower(0.0);
+        leftDr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDr.setPower(0.0);
+        rightDr.setPower(0.0);
     }
 }

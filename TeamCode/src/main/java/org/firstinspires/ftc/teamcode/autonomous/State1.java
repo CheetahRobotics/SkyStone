@@ -9,7 +9,7 @@ public class State1 extends DrivingState {
         // drive forward 45 inches:
         super(stateMachine,
                 0.0,
-                47.5,
+                28.5,
                 Stop.class,
                 -0.5,
                 0.5);

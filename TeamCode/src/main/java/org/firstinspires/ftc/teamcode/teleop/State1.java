@@ -13,8 +13,8 @@ public class State1 extends StateBase {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive ;
     private DcMotor rightDrive ;
-    private DcMotor leftD ;
-    private DcMotor rightD ;
+    private DcMotor leftDr ;
+    private DcMotor rightDr ;
     //private DcMotor arm;
 
 
@@ -34,8 +34,8 @@ public class State1 extends StateBase {
         super(stateMachine);
         leftDrive  = hardwareMap.get(DcMotor.class, "motor_1");
         rightDrive = hardwareMap.get(DcMotor.class, "motor_2");
-        leftD= hardwareMap.get(DcMotor.class, "motor_3");
-        rightD= hardwareMap.get(DcMotor.class, "motor_4");
+        leftDr= hardwareMap.get(DcMotor.class, "motor_3");
+        rightDr= hardwareMap.get(DcMotor.class, "motor_4");
         //arm = hardwareMap.get(DcMotor.class,"motor_3");
         servo = hardwareMap.get(Servo.class, "right_servo");
         servo_2 = hardwareMap.get(Servo.class, "left_servo");
@@ -78,10 +78,10 @@ public class State1 extends StateBase {
 //        droppower = Range.clip(drop,-1,1);
 
         leftDrive.setPower(leftPower);
-        leftD.setPower(rightPower);
+        leftDr.setPower(rightPower);
 
         rightDrive.setPower(rightPower);
-        rightD.setPower(leftPower);
+        rightDr.setPower(leftPower);
 
 //        arm.setPower(liftpower);
 //        arm.setPower(droppower);

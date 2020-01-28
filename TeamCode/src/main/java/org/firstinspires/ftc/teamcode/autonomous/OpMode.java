@@ -21,8 +21,8 @@ public class OpMode extends OpModeBase {
         // Tetrix Max 4" Wheel: 12.56cm, Mecanum HD Wheel: 31.9024
         // just update the RobotCallibration numbers on the next line:
         stateMachine.setRobotCalibration(new RobotCalibration(
-                31.9024,
-                287,
+                10.99,
+                288,
                 1960));
 
         stateMachine.updateState(State1.class);    // Start at state number 1.
