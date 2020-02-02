@@ -20,16 +20,16 @@ public class TurningState extends DrivingState{
 
         addTelemetry("Back Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
         addTelemetry("Back Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
-        addTelemetry("Front Left Motor Pos: ", "%d", leftDr.getCurrentPosition());
-        addTelemetry("Front Right Motor Pos: ", "%d", rightDr.getCurrentPosition());
+        addTelemetry("Front Left Motor Pos: ", "%d", leftBackDrive.getCurrentPosition());
+        addTelemetry("Front Right Motor Pos: ", "%d", rightBackDrive.getCurrentPosition());
 
 
         if (Math.abs(leftDrive.getCurrentPosition()) > stateMachine.getRobotCalibration().countsFor90DegreeTurn ||
             Math.abs(rightDrive.getCurrentPosition()) > stateMachine.getRobotCalibration().countsFor90DegreeTurn) {
             addTelemetry("Left Motor Pos: ", "%d", leftDrive.getCurrentPosition());
             addTelemetry("Right Motor Pos: ", "%d", rightDrive.getCurrentPosition());
-            addTelemetry("Left Motor Pos: ", "%d", leftDr.getCurrentPosition());
-            addTelemetry("Right Motor Pos: ", "%d", rightDr.getCurrentPosition());
+            addTelemetry("Left Motor Pos: ", "%d", leftBackDrive.getCurrentPosition());
+            addTelemetry("Right Motor Pos: ", "%d", rightBackDrive.getCurrentPosition());
             stopMotors();
             sleep(1000);
             stateMachine.updateState(this.nextState);

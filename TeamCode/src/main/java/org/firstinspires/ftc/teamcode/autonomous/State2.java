@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.stateMachine.DrivingState;
 import org.firstinspires.ftc.teamcode.stateMachine.StateBase;
 import org.firstinspires.ftc.teamcode.stateMachine.StateMachine;
+import org.firstinspires.ftc.teamcode.stateMachine.Stop;
 import org.firstinspires.ftc.teamcode.stateMachine.TurningState;
 
 public class State2 extends TurningState {
     public State2(StateMachine stateMachine) {
         super(stateMachine,
-                DropOff5.class,
+                Stop.class,
                 true);
     }
 }

@@ -9,13 +9,15 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.stateMachine.StateBase;
 import org.firstinspires.ftc.teamcode.stateMachine.StateMachine;
 
+import static org.firstinspires.ftc.teamcode.stateMachine.LoggerWrapper.log;
+
 public class State1 extends StateBase {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive ;
     private DcMotor rightDrive ;
-    private DcMotor leftDr ;
-    private DcMotor rightDr ;
-    //private DcMotor arm;
+    private DcMotor leftBackDrive;
+    private DcMotor rightBackDrive;
+    private boolean triggerModeOn = false;
 
 
     static final double INCREMENT   = 0.01;
@@ -34,8 +36,8 @@ public class State1 extends StateBase {
         super(stateMachine);
         leftDrive  = hardwareMap.get(DcMotor.class, "motor_1");
         rightDrive = hardwareMap.get(DcMotor.class, "motor_2");
-        leftDr= hardwareMap.get(DcMotor.class, "motor_3");
-        rightDr= hardwareMap.get(DcMotor.class, "motor_4");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "motor_3");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "motor_4");
         //arm = hardwareMap.get(DcMotor.class,"motor_3");
         servo = hardwareMap.get(Servo.class, "right_servo");
         servo_2 = hardwareMap.get(Servo.class, "left_servo");
@@ -56,44 +58,33 @@ public class State1 extends StateBase {
     @Override
     public void postEventsCallback() {
 
-        double leftPower;
-        double rightPower;
-//        double liftpower;
-//        double droppower;
+        if (!triggerModeOn) {
+            double leftPower;
+            double rightPower;
 
-        double drive = -gamepad.right_stick_x;
-        double turn  = gamepad.left_stick_y;
-//        float lift = -gamepad.right_trigger;
-//        float drop = gamepad.left_trigger;
+            double drive = -gamepad.right_stick_x;
+            double turn = gamepad.left_stick_y;
 
-        this.servo.setPosition(position_1);
-        addTelemetry( "Servo Positon","%s", this.servo.getPosition());
-        this.servo_2.setPosition(position_2);
-        addTelemetry( "Servo Positon","%s", this.servo_2.getPosition());
+            this.servo.setPosition(position_1);
+            addTelemetry("Servo Positon", "%s", this.servo.getPosition());
+            this.servo_2.setPosition(position_2);
+            addTelemetry("Servo Positon", "%s", this.servo_2.getPosition());
 
+            leftPower = Range.clip(drive + turn, -1.0, 1.0);
+            rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
-        leftPower   = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-//        liftpower = Range.clip(lift,-1,1.0);
-//        droppower = Range.clip(drop,-1,1);
+            leftDrive.setPower(leftPower);
+            leftBackDrive.setPower(rightPower);
 
-        leftDrive.setPower(leftPower);
-        leftDr.setPower(rightPower);
+            rightDrive.setPower(rightPower);
+            rightBackDrive.setPower(leftPower);
 
-        rightDrive.setPower(rightPower);
-        rightDr.setPower(leftPower);
-
-//        arm.setPower(liftpower);
-//        arm.setPower(droppower);
+        }
 
         // this is called after all events
         addTelemetry("LeftStick", "X: %f, Y: %f",
                 gamepad.left_stick_x, gamepad.left_stick_y);
-        addTelemetry("Arm", "Lift: %f, Drop: %f",
-                gamepad.left_trigger, gamepad.right_trigger);
-        addTelemetry("Power", " left power: %f, right power: %f ",
-                leftPower, rightPower);
-       // addTelemetry("Servo Position", "%5.2f", position);
+        addTelemetry("triggerModeOn", "%s", triggerModeOn);
     }
     public void leftBumperChanged(boolean left_bumper) {
         if (left_bumper == true){
@@ -112,6 +103,27 @@ public class State1 extends StateBase {
         addTelemetry("Right Bumper", "%s", Boolean.toString(right_bumper));
         addTelemetry( "Positon","%s",position_1);
         addTelemetry( "Positon","%s",position_2);
+    }
+
+    public void leftTriggerChanged(float power) {
+        triggerModeOn = power > 0.01;
+
+        addTelemetry( "leftTrigger","%s",power);
+        leftDrive.setPower(power);
+        leftBackDrive.setPower(-power);
+
+        rightDrive.setPower(power);
+        rightBackDrive.setPower(-power);
+    }
+    public void rightTriggerChanged(float power) {
+        triggerModeOn = power > 0.01;
+
+        addTelemetry( "rightTrigger","%s",power);
+        leftDrive.setPower(-power);
+        leftBackDrive.setPower(power);
+
+        rightDrive.setPower(-power);
+        rightBackDrive.setPower(power);
     }
 }
 
