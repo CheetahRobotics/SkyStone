@@ -8,9 +8,9 @@ public class State1 extends DrivingState {
     public State1(StateMachine stateMachine) {
         // drive forward 45 inches:
         super(stateMachine,
-                4.0,
+                1.85,
                 State2.class,
-                -1);
+                -0.5);
     }
 }
 
